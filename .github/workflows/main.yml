@@ -1,37 +1,40 @@
-name: Heart Disease ML Workflow
+name: ML Pipeline on Push
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main  # or any branch you want
 
 jobs:
-  heart-ml:
+  train-model:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: 🐍 Setup Python
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.10'  # Choose your Python version
 
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: 🚀 Train the model
-      run: python src/train.py
+    - name: Train  Model
+      run: |
+        python src/train.py
 
-    - name: 🔮 Predict for sample patient
-      run: python src/predict.py
+    - name: Test Model
+      run: |
+        python src/predict.py
+      
 
-    - name: 📤 Upload trained model
-      uses: actions/upload-artifact@v3
+    - name: Upload Model Artifact
+      uses: actions/upload-artifact@v4
       with:
-        name: heart-model
-        path: model/model.pkl
+        name: trained-model
+        path: model/ model.pkl # Directory where your model is saved
+
